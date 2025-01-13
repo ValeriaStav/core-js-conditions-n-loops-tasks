@@ -339,8 +339,49 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const matrix = [];
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = [];
+  }
+
+  let left = 0;
+  let right = size - 1;
+  let top = 0;
+  let bottom = size - 1;
+  let num = 1;
+
+  while (left <= right && top <= bottom) {
+    for (let i = left; i <= right; i += 1) {
+      matrix[top][i] = num;
+      num += 1;
+    }
+    top += 1;
+
+    for (let i = top; i <= bottom; i += 1) {
+      matrix[i][right] = num;
+      num += 1;
+    }
+    right -= 1;
+
+    if (top <= bottom) {
+      for (let i = right; i >= left; i -= 1) {
+        matrix[bottom][i] = num;
+        num += 1;
+      }
+      bottom -= 1;
+    }
+
+    if (left <= right) {
+      for (let i = bottom; i >= top; i -= 1) {
+        matrix[i][left] = num;
+        num += 1;
+      }
+      left += 1;
+    }
+  }
+
+  return matrix;
 }
 
 /**
@@ -358,8 +399,24 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const result = matrix;
+  const len = result.length;
+
+  for (let i = 0; i < len; i += 1) {
+    for (let j = i; j < len; j += 1) {
+      [result[i][j], result[j][i]] = [result[j][i], result[i][j]];
+    }
+  }
+  for (let i = 0; i < len; i += 1) {
+    for (let j = 0; j < Math.floor(len / 2); j += 1) {
+      [result[i][j], result[i][len - 1 - j]] = [
+        result[i][len - 1 - j],
+        result[i][j],
+      ];
+    }
+  }
+  return result;
 }
 
 /**
@@ -376,8 +433,35 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const result = arr;
+
+  function quickSort(left, right) {
+    if (left >= right) return;
+
+    const div = result[Math.floor((left + right) / 2)];
+    let i = left;
+    let j = right;
+
+    while (i <= j) {
+      while (result[i] < div) i += 1;
+      while (result[j] > div) j -= 1;
+
+      if (i <= j) {
+        const temp = result[i];
+        result[i] = result[j];
+        result[j] = temp;
+        i += 1;
+        j -= 1;
+      }
+    }
+
+    quickSort(left, j);
+    quickSort(i, right);
+  }
+
+  quickSort(0, result.length - 1);
+  return result;
 }
 
 /**
